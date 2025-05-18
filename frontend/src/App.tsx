@@ -1,27 +1,47 @@
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import NotFound from "@/pages/NotFound";
+import Subscribe from "./pages/Subscribe";
+import "./App.css";
 
-const queryClient = new QueryClient();
+function App() {
+  return (
+    <Router>
+      <div className="min-h-screen">
+        <nav className="bg-white shadow-sm py-4">
+          <div className="container mx-auto px-4 flex justify-between items-center">
+            <Link to="/" className="text-xl font-bold text-gray-900">
+              Newsletter Builder
+            </Link>
+            <div className="space-x-4">
+              <Link
+                to="/"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                to="/subscribe"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+              >
+                Subscribe
+              </Link>
+            </div>
+          </div>
+        </nav>
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
+        <main>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/subscribe" element={<Subscribe />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+      </div>
       <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+    </Router>
+  );
+}
 
 export default App;
