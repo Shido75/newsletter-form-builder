@@ -2,16 +2,16 @@ import { useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { 
-  Mail, 
-  User, 
-  AlertCircle, 
-  CheckCircle2, 
-  ArrowRight, 
-  ArrowLeft, 
-  Globe, 
-  Briefcase, 
-  Calendar, 
+import {
+  Mail,
+  User,
+  AlertCircle,
+  CheckCircle2,
+  ArrowRight,
+  ArrowLeft,
+  Globe,
+  Briefcase,
+  Calendar,
   Bell
 } from "lucide-react";
 
@@ -42,8 +42,8 @@ const personalInfoSchema = z.object({
 
 const preferencesSchema = z.object({
   interests: z.array(z.string()).min(1, { message: "Select at least one interest" }),
-  frequency: z.enum(["daily", "weekly", "monthly"], { 
-    required_error: "Please select a frequency" 
+  frequency: z.enum(["daily", "weekly", "monthly"], {
+    required_error: "Please select a frequency"
   }),
   location: z.string().optional(),
 });
@@ -128,7 +128,7 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
     const timer = setTimeout(() => {
       setShowFloatingForm(true);
     }, 5000);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -236,7 +236,7 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     setError(null);
-    
+
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -276,7 +276,7 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
   // Floating mini form
   const FloatingMiniForm = () => (
     <div className={`fixed bottom-4 right-4 ${themeClasses.formBg} rounded-lg shadow-xl p-4 w-72 transform transition-all duration-500 z-50 ${showFloatingForm ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
-      <button 
+      <button
         className="absolute -top-2 -right-2 bg-gray-200 rounded-full p-1 text-gray-600 hover:bg-gray-300"
         onClick={() => setShowFloatingForm(false)}
       >
@@ -287,13 +287,13 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
       <h4 className={`text-sm font-semibold mb-2 ${themeClasses.headingText}`}>Don't miss out!</h4>
       <p className={`text-xs ${themeClasses.bodyText} mb-3`}>Subscribe to our newsletter for exclusive updates.</p>
       <div className="flex space-x-2">
-        <Input 
-          placeholder="Your email" 
-          className={`h-8 text-xs ${themeClasses.inputFocus}`} 
+        <Input
+          placeholder="Your email"
+          className={`h-8 text-xs ${themeClasses.inputFocus}`}
           onChange={(e) => form.setValue("email", e.target.value)}
         />
-        <Button 
-          size="sm" 
+        <Button
+          size="sm"
           className={`h-8 text-xs ${themeClasses.buttonGradient}`}
           onClick={() => {
             setShowFloatingForm(false);
@@ -311,7 +311,7 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
       <div className={`w-full max-w-md mx-auto p-6 space-y-6 ${themeClasses.formBg} backdrop-blur-sm rounded-lg border shadow-lg relative overflow-hidden`}>
         {/* Background gradient effect */}
         <div className={`absolute inset-0 bg-${colorTheme}-background/50 bg-gradient-shimmer -z-10`}></div>
-        
+
         {/* Progress indicator */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm text-gray-500">
@@ -320,7 +320,7 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
           </div>
           <Progress value={progress} className={`h-2 [&>div]:${themeClasses.progressBar}`} />
         </div>
-        
+
         {/* Form header */}
         <div className="space-y-2 text-center">
           <h3 className={`text-2xl font-bold ${themeClasses.headingText} animate-fadeIn`}>
@@ -367,9 +367,9 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
                                 field.onChange(e);
                                 // Real-time validation feedback
                                 if (e.target.value && !e.target.value.includes('@')) {
-                                  form.setError('email', { 
-                                    type: 'manual', 
-                                    message: 'Please include an @ in the email address' 
+                                  form.setError('email', {
+                                    type: 'manual',
+                                    message: 'Please include an @ in the email address'
                                   });
                                 } else {
                                   form.clearErrors('email');
@@ -396,10 +396,10 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
                           <FormControl>
                             <div className={`relative input-focus-effect rounded-md ${watchFirstName ? 'has-value' : ''}`}>
                               <User className={`absolute left-3 top-3 h-4 w-4 text-${colorTheme}-primary/60`} />
-                              <Input 
-                                placeholder="John" 
-                                className={`pl-10 transition-all duration-300 border-gray-300 ${themeClasses.inputFocus}`} 
-                                {...field} 
+                              <Input
+                                placeholder="John"
+                                className={`pl-10 transition-all duration-300 border-gray-300 ${themeClasses.inputFocus}`}
+                                {...field}
                               />
                             </div>
                           </FormControl>
@@ -416,10 +416,10 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
                           <FormLabel className={themeClasses.headingText}>Last Name</FormLabel>
                           <FormControl>
                             <div className={`relative input-focus-effect rounded-md ${watchLastName ? 'has-value' : ''}`}>
-                              <Input 
-                                placeholder="Doe" 
-                                className={`transition-all duration-300 border-gray-300 ${themeClasses.inputFocus}`} 
-                                {...field} 
+                              <Input
+                                placeholder="Doe"
+                                className={`transition-all duration-300 border-gray-300 ${themeClasses.inputFocus}`}
+                                {...field}
                               />
                             </div>
                           </FormControl>
@@ -499,9 +499,9 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
                           >
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem 
-                                  value="daily" 
-                                  className={`border-${colorTheme}-primary/50 text-${colorTheme}-primary`} 
+                                <RadioGroupItem
+                                  value="daily"
+                                  className={`border-${colorTheme}-primary/50 text-${colorTheme}-primary`}
                                 />
                               </FormControl>
                               <FormLabel className={`font-normal cursor-pointer ${themeClasses.headingText}`}>
@@ -510,9 +510,9 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
                             </FormItem>
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem 
-                                  value="weekly" 
-                                  className={`border-${colorTheme}-primary/50 text-${colorTheme}-primary`} 
+                                <RadioGroupItem
+                                  value="weekly"
+                                  className={`border-${colorTheme}-primary/50 text-${colorTheme}-primary`}
                                 />
                               </FormControl>
                               <FormLabel className={`font-normal cursor-pointer ${themeClasses.headingText}`}>
@@ -521,9 +521,9 @@ export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) 
                             </FormItem>
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem 
-                                  value="monthly" 
-                                  className={`border-${colorTheme}-primary/50 text-${colorTheme}-primary`} 
+                                <RadioGroupItem
+                                  value="monthly"
+                                  className={`border-${colorTheme}-primary/50 text-${colorTheme}-primary`}
                                 />
                               </FormControl>
                               <FormLabel className={`font-normal cursor-pointer ${themeClasses.headingText}`}>
