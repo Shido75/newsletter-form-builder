@@ -52,6 +52,38 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Classic Blue and White
+        classic: {
+          primary: "#1a365d", // Navy blue
+          secondary: "#2b4c7e", // Medium blue
+          accent: "#4299e1", // Bright blue
+          background: "#ffffff", // White
+          text: "#1a202c", // Dark gray for text
+        },
+        // Warm Neutrals with Pop
+        warm: {
+          primary: "#e2725b", // Coral
+          secondary: "#30b8b2", // Teal
+          accent: "#f6ad55", // Orange
+          background: "#f7f7f7", // Light gray
+          text: "#2d3748", // Dark gray for text
+        },
+        // Monochromatic Green
+        mono: {
+          primary: "#38a169", // Medium green
+          secondary: "#68d391", // Light green
+          accent: "#276749", // Dark green
+          background: "#f0fff4", // Very light green
+          text: "#1a202c", // Dark gray for text
+        },
+        // Complementary Blue/Orange
+        complementary: {
+          primary: "#3182ce", // Blue
+          secondary: "#63b3ed", // Light blue
+          accent: "#ed8936", // Orange
+          background: "#ebf8ff", // Very light blue
+          text: "#2d3748", // Dark gray for text
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

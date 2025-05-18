@@ -73,7 +73,13 @@ const interestOptions = [
   { id: "lifestyle", label: "Lifestyle" },
 ];
 
-export function NewsletterForm() {
+type ColorTheme = "classic" | "warm" | "mono" | "complementary";
+
+interface NewsletterFormProps {
+  colorTheme?: ColorTheme;
+}
+
+export function NewsletterForm({ colorTheme = "classic" }: NewsletterFormProps) {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -125,6 +131,67 @@ export function NewsletterForm() {
     
     return () => clearTimeout(timer);
   }, []);
+
+  // Get theme-specific classes
+  const getThemeClasses = () => {
+    const themeClasses = {
+      formBg: "",
+      buttonGradient: "",
+      accentBg: "",
+      progressBar: "",
+      checkboxBg: "",
+      inputFocus: "",
+      headingText: "",
+      bodyText: "",
+    };
+
+    switch (colorTheme) {
+      case "classic":
+        themeClasses.formBg = "bg-white/80 border-gray-100";
+        themeClasses.buttonGradient = "bg-gradient-to-r from-classic-primary to-classic-secondary hover:from-classic-secondary hover:to-classic-primary text-white";
+        themeClasses.accentBg = "bg-classic-accent/10";
+        themeClasses.progressBar = "bg-classic-primary";
+        themeClasses.checkboxBg = "bg-classic-primary";
+        themeClasses.inputFocus = "focus:border-classic-accent focus:ring-classic-accent/30";
+        themeClasses.headingText = "text-classic-text";
+        themeClasses.bodyText = "text-classic-text/80";
+        break;
+      case "warm":
+        themeClasses.formBg = "bg-warm-background/90 border-warm-secondary/20";
+        themeClasses.buttonGradient = "bg-gradient-to-r from-warm-primary to-warm-secondary hover:from-warm-secondary hover:to-warm-primary text-white";
+        themeClasses.accentBg = "bg-warm-accent/10";
+        themeClasses.progressBar = "bg-warm-primary";
+        themeClasses.checkboxBg = "bg-warm-primary";
+        themeClasses.inputFocus = "focus:border-warm-accent focus:ring-warm-accent/30";
+        themeClasses.headingText = "text-warm-text";
+        themeClasses.bodyText = "text-warm-text/80";
+        break;
+      case "mono":
+        themeClasses.formBg = "bg-mono-background/90 border-mono-secondary/20";
+        themeClasses.buttonGradient = "bg-gradient-to-r from-mono-primary to-mono-secondary hover:from-mono-secondary hover:to-mono-primary text-white";
+        themeClasses.accentBg = "bg-mono-accent/10";
+        themeClasses.progressBar = "bg-mono-primary";
+        themeClasses.checkboxBg = "bg-mono-primary";
+        themeClasses.inputFocus = "focus:border-mono-accent focus:ring-mono-accent/30";
+        themeClasses.headingText = "text-mono-text";
+        themeClasses.bodyText = "text-mono-text/80";
+        break;
+      case "complementary":
+        themeClasses.formBg = "bg-complementary-background/90 border-complementary-secondary/20";
+        themeClasses.buttonGradient = "bg-gradient-to-r from-complementary-primary to-complementary-secondary hover:from-complementary-secondary hover:to-complementary-primary text-white";
+        themeClasses.accentBg = "bg-complementary-accent/10";
+        themeClasses.progressBar = "bg-complementary-primary";
+        themeClasses.checkboxBg = "bg-complementary-primary";
+        themeClasses.inputFocus = "focus:border-complementary-accent focus:ring-complementary-accent/30";
+        themeClasses.headingText = "text-complementary-text";
+        themeClasses.bodyText = "text-complementary-text/80";
+        break;
+    }
+
+    return themeClasses;
+  };
+
+  const themeClasses = getThemeClasses();
 
   // Handle next step
   const handleNext = async () => {
@@ -186,18 +253,18 @@ export function NewsletterForm() {
   // Success state
   if (isSuccess) {
     return (
-      <div className="w-full max-w-md mx-auto p-6 space-y-4 bg-white/80 backdrop-blur-sm rounded-lg border border-gray-100 shadow-lg animate-fadeIn">
+      <div className={`w-full max-w-md mx-auto p-6 space-y-4 ${themeClasses.formBg} backdrop-blur-sm rounded-lg border shadow-lg animate-fadeIn`}>
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="relative">
-            <div className="absolute inset-0 bg-green-100 rounded-full animate-pulse-subtle"></div>
-            <CheckCircle2 className="h-16 w-16 text-green-500 relative z-10" />
+            <div className={`absolute inset-0 ${themeClasses.accentBg} rounded-full animate-pulse-subtle`}></div>
+            <CheckCircle2 className={`h-16 w-16 text-${colorTheme}-primary relative z-10`} />
           </div>
-          <h3 className="text-2xl font-semibold text-gray-900">Thank you for subscribing!</h3>
-          <p className="text-gray-600">
+          <h3 className={`text-2xl font-semibold ${themeClasses.headingText}`}>Thank you for subscribing!</h3>
+          <p className={themeClasses.bodyText}>
             Please check your email to confirm your subscription.
           </p>
-          <div className="w-full max-w-xs p-4 mt-4 bg-blue-50 rounded-lg border border-blue-100">
-            <p className="text-sm text-blue-700">
+          <div className={`w-full max-w-xs p-4 mt-4 ${themeClasses.accentBg} rounded-lg border border-${colorTheme}-primary/20`}>
+            <p className={`text-sm text-${colorTheme}-primary`}>
               <span className="font-medium">Pro tip:</span> Add our email to your contacts to ensure you receive our newsletters.
             </p>
           </div>
@@ -208,7 +275,7 @@ export function NewsletterForm() {
 
   // Floating mini form
   const FloatingMiniForm = () => (
-    <div className={`fixed bottom-4 right-4 bg-white rounded-lg shadow-xl p-4 w-72 transform transition-all duration-500 z-50 ${showFloatingForm ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
+    <div className={`fixed bottom-4 right-4 ${themeClasses.formBg} rounded-lg shadow-xl p-4 w-72 transform transition-all duration-500 z-50 ${showFloatingForm ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
       <button 
         className="absolute -top-2 -right-2 bg-gray-200 rounded-full p-1 text-gray-600 hover:bg-gray-300"
         onClick={() => setShowFloatingForm(false)}
@@ -217,17 +284,17 @@ export function NewsletterForm() {
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
       </button>
-      <h4 className="text-sm font-semibold mb-2">Don't miss out!</h4>
-      <p className="text-xs text-gray-600 mb-3">Subscribe to our newsletter for exclusive updates.</p>
+      <h4 className={`text-sm font-semibold mb-2 ${themeClasses.headingText}`}>Don't miss out!</h4>
+      <p className={`text-xs ${themeClasses.bodyText} mb-3`}>Subscribe to our newsletter for exclusive updates.</p>
       <div className="flex space-x-2">
         <Input 
           placeholder="Your email" 
-          className="h-8 text-xs" 
+          className={`h-8 text-xs ${themeClasses.inputFocus}`} 
           onChange={(e) => form.setValue("email", e.target.value)}
         />
         <Button 
           size="sm" 
-          className="h-8 text-xs bg-blue-600 hover:bg-blue-700"
+          className={`h-8 text-xs ${themeClasses.buttonGradient}`}
           onClick={() => {
             setShowFloatingForm(false);
             form.setValue("email", form.getValues().email);
@@ -241,9 +308,9 @@ export function NewsletterForm() {
 
   return (
     <>
-      <div className="w-full max-w-md mx-auto p-6 space-y-6 bg-white/80 backdrop-blur-sm rounded-lg border border-gray-100 shadow-lg relative overflow-hidden">
+      <div className={`w-full max-w-md mx-auto p-6 space-y-6 ${themeClasses.formBg} backdrop-blur-sm rounded-lg border shadow-lg relative overflow-hidden`}>
         {/* Background gradient effect */}
-        <div className="absolute inset-0 bg-gradient-shimmer -z-10"></div>
+        <div className={`absolute inset-0 bg-${colorTheme}-background/50 bg-gradient-shimmer -z-10`}></div>
         
         {/* Progress indicator */}
         <div className="space-y-2">
@@ -251,17 +318,17 @@ export function NewsletterForm() {
             <span>Step {step} of 3</span>
             <span>{progress}% Complete</span>
           </div>
-          <Progress value={progress} className="h-2" />
+          <Progress value={progress} className={`h-2 [&>div]:${themeClasses.progressBar}`} />
         </div>
         
         {/* Form header */}
         <div className="space-y-2 text-center">
-          <h3 className="text-2xl font-bold text-gray-900 animate-fadeIn">
+          <h3 className={`text-2xl font-bold ${themeClasses.headingText} animate-fadeIn`}>
             {step === 1 && "Join Our Newsletter"}
             {step === 2 && "Customize Your Experience"}
             {step === 3 && "Almost Done!"}
           </h3>
-          <p className="text-gray-600 text-sm animate-fadeIn">
+          <p className={`${themeClasses.bodyText} text-sm animate-fadeIn`}>
             {step === 1 && "Get the latest updates delivered to your inbox."}
             {step === 2 && "Tell us what you're interested in."}
             {step === 3 && "Review and confirm your subscription."}
@@ -288,13 +355,13 @@ export function NewsletterForm() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel className={themeClasses.headingText}>Email</FormLabel>
                         <FormControl>
                           <div className={`relative input-focus-effect rounded-md ${watchEmail ? 'has-value' : ''}`}>
-                            <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                            <Mail className={`absolute left-3 top-3 h-4 w-4 text-${colorTheme}-primary/60`} />
                             <Input
                               placeholder="your@email.com"
-                              className="pl-10 transition-all duration-300 border-gray-300 focus:border-blue-400"
+                              className={`pl-10 transition-all duration-300 border-gray-300 ${themeClasses.inputFocus}`}
                               {...field}
                               onChange={(e) => {
                                 field.onChange(e);
@@ -310,7 +377,7 @@ export function NewsletterForm() {
                               }}
                             />
                             {field.value && (
-                              <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500 animate-fadeIn" />
+                              <CheckCircle2 className={`absolute right-3 top-3 h-4 w-4 text-${colorTheme}-primary animate-fadeIn`} />
                             )}
                           </div>
                         </FormControl>
@@ -325,13 +392,13 @@ export function NewsletterForm() {
                       name="firstName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>First Name</FormLabel>
+                          <FormLabel className={themeClasses.headingText}>First Name</FormLabel>
                           <FormControl>
                             <div className={`relative input-focus-effect rounded-md ${watchFirstName ? 'has-value' : ''}`}>
-                              <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                              <User className={`absolute left-3 top-3 h-4 w-4 text-${colorTheme}-primary/60`} />
                               <Input 
                                 placeholder="John" 
-                                className="pl-10 transition-all duration-300 border-gray-300 focus:border-blue-400" 
+                                className={`pl-10 transition-all duration-300 border-gray-300 ${themeClasses.inputFocus}`} 
                                 {...field} 
                               />
                             </div>
@@ -346,12 +413,12 @@ export function NewsletterForm() {
                       name="lastName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Last Name</FormLabel>
+                          <FormLabel className={themeClasses.headingText}>Last Name</FormLabel>
                           <FormControl>
                             <div className={`relative input-focus-effect rounded-md ${watchLastName ? 'has-value' : ''}`}>
                               <Input 
                                 placeholder="Doe" 
-                                className="transition-all duration-300 border-gray-300 focus:border-blue-400" 
+                                className={`transition-all duration-300 border-gray-300 ${themeClasses.inputFocus}`} 
                                 {...field} 
                               />
                             </div>
@@ -373,8 +440,8 @@ export function NewsletterForm() {
                     render={() => (
                       <FormItem>
                         <div className="mb-4">
-                          <FormLabel className="text-base">Interests</FormLabel>
-                          <FormDescription>
+                          <FormLabel className={`text-base ${themeClasses.headingText}`}>Interests</FormLabel>
+                          <FormDescription className={themeClasses.bodyText}>
                             Select topics you'd like to receive updates about.
                           </FormDescription>
                         </div>
@@ -388,7 +455,7 @@ export function NewsletterForm() {
                                 return (
                                   <FormItem
                                     key={option.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-3 shadow-sm transition-all hover:bg-gray-50"
+                                    className={`flex flex-row items-start space-x-3 space-y-0 rounded-md border p-3 shadow-sm transition-all hover:bg-${colorTheme}-background`}
                                   >
                                     <FormControl>
                                       <Checkbox
@@ -401,9 +468,10 @@ export function NewsletterForm() {
                                               ) || [];
                                           field.onChange(updatedValue);
                                         }}
+                                        className={`border-${colorTheme}-primary/50 data-[state=checked]:bg-${colorTheme}-primary data-[state=checked]:border-${colorTheme}-primary`}
                                       />
                                     </FormControl>
-                                    <FormLabel className="font-normal cursor-pointer">
+                                    <FormLabel className={`font-normal cursor-pointer ${themeClasses.headingText}`}>
                                       {option.label}
                                     </FormLabel>
                                   </FormItem>
@@ -422,7 +490,7 @@ export function NewsletterForm() {
                     name="frequency"
                     render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel>Email Frequency</FormLabel>
+                        <FormLabel className={themeClasses.headingText}>Email Frequency</FormLabel>
                         <FormControl>
                           <RadioGroup
                             onValueChange={field.onChange}
@@ -431,25 +499,34 @@ export function NewsletterForm() {
                           >
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem value="daily" />
+                                <RadioGroupItem 
+                                  value="daily" 
+                                  className={`border-${colorTheme}-primary/50 text-${colorTheme}-primary`} 
+                                />
                               </FormControl>
-                              <FormLabel className="font-normal cursor-pointer">
+                              <FormLabel className={`font-normal cursor-pointer ${themeClasses.headingText}`}>
                                 Daily
                               </FormLabel>
                             </FormItem>
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem value="weekly" />
+                                <RadioGroupItem 
+                                  value="weekly" 
+                                  className={`border-${colorTheme}-primary/50 text-${colorTheme}-primary`} 
+                                />
                               </FormControl>
-                              <FormLabel className="font-normal cursor-pointer">
+                              <FormLabel className={`font-normal cursor-pointer ${themeClasses.headingText}`}>
                                 Weekly
                               </FormLabel>
                             </FormItem>
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem value="monthly" />
+                                <RadioGroupItem 
+                                  value="monthly" 
+                                  className={`border-${colorTheme}-primary/50 text-${colorTheme}-primary`} 
+                                />
                               </FormControl>
-                              <FormLabel className="font-normal cursor-pointer">
+                              <FormLabel className={`font-normal cursor-pointer ${themeClasses.headingText}`}>
                                 Monthly
                               </FormLabel>
                             </FormItem>
@@ -465,18 +542,18 @@ export function NewsletterForm() {
                     name="location"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Location (Optional)</FormLabel>
+                        <FormLabel className={themeClasses.headingText}>Location (Optional)</FormLabel>
                         <FormControl>
                           <div className="relative input-focus-effect rounded-md">
-                            <Globe className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                            <Globe className={`absolute left-3 top-3 h-4 w-4 text-${colorTheme}-primary/60`} />
                             <Input
                               placeholder="Your location"
-                              className="pl-10 transition-all duration-300 border-gray-300 focus:border-blue-400"
+                              className={`pl-10 transition-all duration-300 border-gray-300 ${themeClasses.inputFocus}`}
                               {...field}
                             />
                           </div>
                         </FormControl>
-                        <FormDescription>
+                        <FormDescription className={themeClasses.bodyText}>
                           We'll send you region-specific content.
                         </FormDescription>
                         <FormMessage />
@@ -489,12 +566,12 @@ export function NewsletterForm() {
               {/* Step 3: Confirmation */}
               <TabsContent value="step3" className={step === 3 ? "animate-fadeIn" : "hidden"}>
                 <div className="space-y-4">
-                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-4">
-                    <h4 className="font-medium text-blue-800 mb-2 flex items-center">
+                  <div className={`${themeClasses.accentBg} p-4 rounded-lg border border-${colorTheme}-primary/20 mb-4`}>
+                    <h4 className={`font-medium text-${colorTheme}-primary mb-2 flex items-center`}>
                       <Bell className="h-4 w-4 mr-2" />
                       Subscription Summary
                     </h4>
-                    <ul className="text-sm text-blue-700 space-y-1">
+                    <ul className={`text-sm text-${colorTheme}-primary space-y-1`}>
                       <li><span className="font-medium">Email:</span> {form.getValues().email}</li>
                       <li><span className="font-medium">Name:</span> {form.getValues().firstName} {form.getValues().lastName}</li>
                       <li><span className="font-medium">Interests:</span> {form.getValues().interests?.map(i => {
@@ -515,11 +592,12 @@ export function NewsletterForm() {
                           <Checkbox
                             checked={field.value}
                             onCheckedChange={field.onChange}
+                            className={`border-${colorTheme}-primary/50 data-[state=checked]:bg-${colorTheme}-primary data-[state=checked]:border-${colorTheme}-primary`}
                           />
                         </FormControl>
                         <div className="space-y-1 leading-none">
-                          <FormLabel className="cursor-pointer">
-                            I agree to the <a href="#" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
+                          <FormLabel className={`cursor-pointer ${themeClasses.headingText}`}>
+                            I agree to the <a href="#" className={`text-${colorTheme}-primary hover:underline`}>Terms of Service</a> and <a href="#" className={`text-${colorTheme}-primary hover:underline`}>Privacy Policy</a>
                           </FormLabel>
                           <FormMessage />
                         </div>
@@ -536,10 +614,11 @@ export function NewsletterForm() {
                           <Checkbox
                             checked={field.value}
                             onCheckedChange={field.onChange}
+                            className={`border-${colorTheme}-primary/50 data-[state=checked]:bg-${colorTheme}-primary data-[state=checked]:border-${colorTheme}-primary`}
                           />
                         </FormControl>
                         <div className="space-y-1 leading-none">
-                          <FormLabel className="cursor-pointer">
+                          <FormLabel className={`cursor-pointer ${themeClasses.headingText}`}>
                             I'd like to receive promotional emails (optional)
                           </FormLabel>
                         </div>
@@ -557,7 +636,7 @@ export function NewsletterForm() {
                   type="button"
                   variant="outline"
                   onClick={handlePrevious}
-                  className="flex items-center transition-all hover:translate-x-[-2px]"
+                  className={`flex items-center transition-all hover:translate-x-[-2px] border-${colorTheme}-primary/30 text-${colorTheme}-primary hover:bg-${colorTheme}-background`}
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
@@ -570,7 +649,7 @@ export function NewsletterForm() {
                 <Button
                   type="button"
                   onClick={handleNext}
-                  className="flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all hover:translate-x-[2px] shadow-md hover:shadow-lg"
+                  className={`flex items-center ${themeClasses.buttonGradient} transition-all hover:translate-x-[2px] shadow-md hover:shadow-lg`}
                 >
                   Next
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -578,7 +657,7 @@ export function NewsletterForm() {
               ) : (
                 <Button
                   type="submit"
-                  className="flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg animate-pulse-subtle"
+                  className={`flex items-center ${themeClasses.buttonGradient} transition-all shadow-md hover:shadow-lg animate-pulse-subtle`}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Subscribing..." : "Complete Subscription"}
@@ -588,13 +667,13 @@ export function NewsletterForm() {
 
             {/* Terms text */}
             {step === 1 && (
-              <p className="text-xs text-center text-gray-500 mt-4 animate-fadeIn">
+              <p className={`text-xs text-center ${themeClasses.bodyText} mt-4 animate-fadeIn`}>
                 By continuing, you agree to our{" "}
-                <a href="#" className="underline hover:text-blue-600">
+                <a href="#" className={`underline hover:text-${colorTheme}-primary`}>
                   Privacy Policy
                 </a>{" "}
                 and{" "}
-                <a href="#" className="underline hover:text-blue-600">
+                <a href="#" className={`underline hover:text-${colorTheme}-primary`}>
                   Terms of Service
                 </a>
                 .
